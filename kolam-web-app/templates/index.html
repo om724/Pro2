@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolam Design Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎨 Kolam Design Generator</h1>
+            <p class="subtitle">Create beautiful traditional Kolam patterns with modern technology</p>
+        </header>
+
+        <main class="main-content">
+            <div class="controls-section">
+                <div class="control-panel">
+                    <h2>Design Parameters</h2>
+                    
+                    <!-- Design Type Selection -->
+                    <div class="control-group">
+                        <label for="designType">Design Type:</label>
+                        <select id="designType" class="form-control">
+                            <optgroup label="🎨 Authentic SIH Patterns">
+                                <option value="single_knot">Single Knot Kolam (Original SIH)</option>
+                                <option value="rhombus">Rhombus Kolam (Original SIH)</option>
+                                <option value="polygon_inscribed">Polygon Inscribed (Original SIH)</option>
+                                <option value="circle_inscribed">Circle Inscribed (Original SIH)</option>
+                                <option value="combined">Suzhi-Sikku-Kambi Combined (Original SIH)</option>
+                            </optgroup>
+                            <optgroup label="📐 L-System Variations">
+                                <option value="suzhi">Suzhi Kolam</option>
+                                <option value="kambi">Kambi Kolam</option>
+                                <option value="fourcolor">Four-Color Kolam</option>
+                                <option value="island">Island Kolam</option>
+                                <option value="sikku">Sikku Kolam</option>
+                                <option value="special">Special Variety Kolam</option>
+                                <option value="group">Group Theory Kolam</option>
+                                <option value="traditional">Traditional Rangoli</option>
+                            </optgroup>
+                            <optgroup label="✏️ Custom">
+                                <option value="custom">Custom Kolam</option>
+                            </optgroup>
+                        </select>
+                        <div class="help-text" id="designTypeHelp">Traditional Suzhi Kolam pattern using L-Systems</div>
+                    </div>
+
+                    <!-- Canvas Size -->
+                    <div class="control-group">
+                        <label for="canvasWidth">Canvas Width:</label>
+                        <input type="number" id="canvasWidth" class="form-control" value="800" min="400" max="1200" step="50">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="canvasHeight">Canvas Height:</label>
+                        <input type="number" id="canvasHeight" class="form-control" value="600" min="300" max="900" step="50">
+                    </div>
+
+                    <!-- Common Parameters -->
+                    <div class="control-group">
+                        <label for="dotSize">Dot Size:</label>
+                        <input type="range" id="dotSize" class="form-range" value="10" min="1" max="30" step="1">
+                        <span class="range-value" id="dotSizeValue">10</span>
+                    </div>
+
+                    <!-- Suzhi Kolam Parameters -->
+                    <div class="control-group suzhi-params">
+                        <label for="iterations">Iterations:</label>
+                        <input type="range" id="iterations" class="form-range" value="6" min="1" max="8" step="1">
+                        <span class="range-value" id="iterationsValue">6</span>
+                    </div>
+
+                    <!-- Kambi Kolam Parameters -->
+                    <div class="control-group kambi-params" style="display: none;">
+                        <label for="rhombusSize">Rhombus Size:</label>
+                        <input type="range" id="rhombusSize" class="form-range" value="5" min="1" max="10" step="1">
+                        <span class="range-value" id="rhombusSizeValue">5</span>
+                    </div>
+
+                    <!-- Group Theory Kolam Parameters -->
+                    <div class="control-group group-params" style="display: none;">
+                        <label for="polygonSides">Polygon Sides:</label>
+                        <input type="range" id="polygonSides" class="form-range" value="6" min="3" max="12" step="1">
+                        <span class="range-value" id="polygonSidesValue">6</span>
+                    </div>
+
+                    <!-- Traditional Rangoli Parameters -->
+                    <div class="control-group traditional-params" style="display: none;">
+                        <label for="gridSize">Grid Size:</label>
+                        <input type="range" id="gridSize" class="form-range" value="7" min="3" max="15" step="1">
+                        <span class="range-value" id="gridSizeValue">7</span>
+                        
+                        <label for="patternType">Pattern Type:</label>
+                        <select id="patternType" class="form-control">
+                            <option value="lotus">Lotus</option>
+                            <option value="peacock">Peacock Feather</option>
+                            <option value="flower">Flower</option>
+                            <option value="geometric">Geometric</option>
+                        </select>
+                    </div>
+
+                    <!-- Polygon Inscribed Parameters -->
+                    <div class="control-group polygon-params" style="display: none;">
+                        <label for="polygonVertices">Polygon Vertices:</label>
+                        <input type="range" id="polygonVertices" class="form-range" value="6" min="3" max="10" step="1">
+                        <span class="range-value" id="polygonVerticesValue">6</span>
+                        
+                        <label for="polygonSize">Polygon Size:</label>
+                        <input type="range" id="polygonSize" class="form-range" value="100" min="50" max="200" step="10">
+                        <span class="range-value" id="polygonSizeValue">100</span>
+                    </div>
+
+                    <!-- Circle Inscribed Parameters -->
+                    <div class="control-group circle-params" style="display: none;">
+                        <label for="circleRadius">Circle Radius:</label>
+                        <input type="range" id="circleRadius" class="form-range" value="100" min="50" max="200" step="10">
+                        <span class="range-value" id="circleRadiusValue">100</span>
+                    </div>
+
+                    <!-- Custom Kolam Parameters -->
+                    <div class="control-group custom-params" style="display: none;">
+                        <label>Coordinate Points:</label>
+                        <div class="coordinates-container">
+                            <div class="coordinate-input">
+                                <input type="number" placeholder="X" class="coord-input" data-axis="x">
+                                <input type="number" placeholder="Y" class="coord-input" data-axis="y">
+                                <button type="button" class="btn-remove-coord">Remove</button>
+                            </div>
+                            <div class="coordinate-input">
+                                <input type="number" placeholder="X" class="coord-input" data-axis="x">
+                                <input type="number" placeholder="Y" class="coord-input" data-axis="y">
+                                <button type="button" class="btn-remove-coord">Remove</button>
+                            </div>
+                        </div>
+                        <button type="button" id="addCoordinate" class="btn-add">Add Coordinate</button>
+                        <div class="help-text">Click on the canvas to add points interactively</div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="button-group">
+                        <button type="button" id="generateKolam" class="btn-primary">Generate Kolam</button>
+                        <button type="button" id="clearCanvas" class="btn-secondary">Clear Canvas</button>
+                        <button type="button" id="downloadSVG" class="btn-secondary" disabled>Download SVG</button>
+                    </div>
+
+                    <!-- Status Messages -->
+                    <div id="statusMessage" class="status-message"></div>
+                    <div id="errorMessage" class="error-message"></div>
+                </div>
+            </div>
+
+            <div class="canvas-section">
+                <div class="canvas-container">
+                    <h2>Kolam Preview</h2>
+                    <div id="kolamCanvas" class="kolam-canvas">
+                        <div class="placeholder-text">
+                            <p>🎨 Your beautiful Kolam design will appear here</p>
+                            <p>Select parameters and click "Generate Kolam" to start</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading Spinner -->
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Generating your Kolam design...</p>
+                    </div>
+                </div>
+
+                <!-- Design Information -->
+                <div class="info-panel">
+                    <h3>Design Information</h3>
+                    <div id="designInfo">
+                        <p>Select a design type and generate a Kolam to see detailed information.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Kolam Design Generator - Preserving traditional art through technology</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

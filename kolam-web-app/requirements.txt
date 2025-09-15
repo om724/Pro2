@@ -1,0 +1,6 @@
+Flask==2.3.3
+Flask-CORS==4.0.0
+Pillow==10.0.0
+svgwrite==1.4.3
+pandas==2.0.3
+numpy==1.24.3
